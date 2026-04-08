@@ -279,7 +279,7 @@ class ApiService {
       if (demoMode) {
         return 'Backend unavailable, using demo data.';
       }
-      return 'Could not reach the backend at $baseUrl. Make sure the FastAPI server is running on port 8000.';
+      return 'Connecting to server...';
     }
     return text;
   }

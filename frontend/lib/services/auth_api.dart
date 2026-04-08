@@ -68,8 +68,7 @@ class AuthApi {
             'user_id': '69c8cee244c75f054847a135',
           }
         };
-      }
-      return {'success': false, 'message': 'Backend server offline! Please run "node backend/index.js"'};
+      return {'success': false, 'message': 'Connecting to server...'};
     }
   }
 
@@ -114,8 +113,7 @@ class AuthApi {
             'user_id': '69c8cee244c75f054847a135',
           }
         };
-      }
-      return {'success': false, 'message': 'Backend server offline! Please run "node backend/index.js"'};
+      return {'success': false, 'message': 'Connecting to server...'};
     }
   }
 }
