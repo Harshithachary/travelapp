@@ -8,7 +8,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 
-mongoose.connect('mongodb://127.0.0.1:27017/travelappDB')
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
 
