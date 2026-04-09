@@ -419,17 +419,23 @@ class TravelDataService extends ChangeNotifier {
     String mediaType = 'image',
   }) async {
     String? mediaBytes;
-    if (file != null && mediaType == 'image') {
-      final bytes = await file.readAsBytes();
-      mediaBytes = base64Encode(bytes);
+    List<int>? fileBytes;
+    
+    if (file != null) {
+      fileBytes = await file.readAsBytes();
+      if (mediaType == 'image') {
+        mediaBytes = base64Encode(fileBytes);
+      }
     }
 
     try {
       await _api.uploadMemory(
         description: description,
-        filePath: mediaBytes ?? file?.path,
+        filePath: file?.path,
         mediaType: mediaType,
         tripId: currentTripId,
+        fileBytes: fileBytes,
+        fileName: file?.name,
       );
     } catch (e) {
       debugPrint("API uploadMemory error: $e");

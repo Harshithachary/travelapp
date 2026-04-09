@@ -95,9 +95,7 @@ class _MapScreenState extends State<MapScreen> {
     if (travelData.sourceCenter != null) points.add(travelData.sourceCenter!);
     if (travelData.tripIsActive && travelData.currentLocation != null) points.add(travelData.currentLocation!);
 
-    final startPoint = (travelData.tripIsActive && travelData.currentLocation != null)
-        ? travelData.currentLocation
-        : (travelData.sourceCenter ?? travelData.currentLocation);
+    final startPoint = travelData.sourceCenter ?? travelData.currentLocation;
     final waypoints = <LatLng>[];
     
     if (startPoint != null) waypoints.add(startPoint);
@@ -353,7 +351,7 @@ class _MapScreenState extends State<MapScreen> {
                 else if ((travelData.sourceCenter != null || travelData.currentLocation != null) && travelData.cityCenter != null)
                   Polyline(
                     points: [
-                      (travelData.tripIsActive && travelData.currentLocation != null) ? travelData.currentLocation! : (travelData.sourceCenter ?? travelData.currentLocation!),
+                      travelData.sourceCenter ?? travelData.currentLocation!,
                       travelData.cityCenter!,
                     ],
                     color: const Color(0xFF008080),
@@ -369,9 +367,7 @@ class _MapScreenState extends State<MapScreen> {
                     height: 80,
                     point: travelData.cityCenter!,
                     builder: (_) {
-                      final startPoint = (travelData.tripIsActive && travelData.currentLocation != null)
-                          ? travelData.currentLocation
-                          : (travelData.sourceCenter ?? travelData.currentLocation);
+                      final startPoint = travelData.sourceCenter ?? travelData.currentLocation;
                       final fallbackDist = startPoint != null 
                         ? const Distance().as(LengthUnit.Meter, startPoint, travelData.cityCenter!) / 1000.0
                         : 0.0;
@@ -405,7 +401,7 @@ class _MapScreenState extends State<MapScreen> {
                   Marker(
                     width: 40,
                     height: 40,
-                    point: (travelData.tripIsActive && travelData.currentLocation != null) ? travelData.currentLocation! : (travelData.sourceCenter ?? travelData.currentLocation!),
+                    point: travelData.sourceCenter ?? travelData.currentLocation!,
                     builder: (_) => Container(
                       decoration: BoxDecoration(
                         color: const Color(0xFF22A7F0),

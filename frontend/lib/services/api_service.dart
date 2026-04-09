@@ -251,16 +251,40 @@ class ApiService {
     String? filePath,
     String? mediaType,
     String? tripId,
+    List<int>? fileBytes,
+    String? fileName,
   }) async {
     final userId = await _getUserId();
-    return _post('/agents/upload-memory', {
-      'description': description,
-      'media_type': mediaType,
-      'image': filePath,
-      if (tripId != null) 'trip_id': tripId,
-      if (userId != null) 'userId': userId,
-      if (userId != null) 'user_id': userId, // Add snake_case for Python backend
-    });
+    
+    final uri = Uri.parse('$baseUrl/agents/upload-memory');
+    final request = http.MultipartRequest('POST', uri);
+    request.fields['description'] = description;
+    request.fields['note'] = description;
+    request.fields['media_type'] = mediaType ?? 'image';
+    if (tripId != null) request.fields['trip_id'] = tripId;
+    if (userId != null) request.fields['user_id'] = userId;
+    
+    if (fileBytes != null) {
+      request.files.add(http.MultipartFile.fromBytes('file', fileBytes, filename: fileName ?? (mediaType == 'video' ? 'upload.mp4' : 'upload.jpg')));
+    } else if (filePath != null && !kIsWeb && !filePath.startsWith('http')) {
+      try {
+        request.files.add(await http.MultipartFile.fromPath('file', filePath));
+      } catch (e) {
+        debugPrint("Skipping file fromPath error: $e");
+      }
+    }
+
+    try {
+      final streamedResponse = await request.send().timeout(_requestTimeout);
+      final response = await http.Response.fromStream(streamedResponse);
+      final decoded = _decodeResponse(response);
+      return decoded is Map<String, dynamic> ? _success(decoded) : _error('Invalid API response');
+    } catch (e) {
+      if (demoMode && _shouldUseDemoFallback(e)) {
+        return _demoUploadMemoryResponse(description: description, mediaType: mediaType, tripId: tripId);
+      }
+      return _error(_friendlyError(e));
+    }
   }
 
   String buildMediaUrl(String mediaPath) {

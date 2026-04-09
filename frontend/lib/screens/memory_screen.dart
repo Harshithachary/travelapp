@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../models/travel_memory.dart';
 import '../services/smart_travel_agent.dart';
@@ -81,6 +82,13 @@ class _MemoryScreenState extends State<MemoryScreen> {
 
   Future<void> captureImage() async {
     try {
+      if (!kIsWeb) {
+        final status = await Permission.camera.request();
+        if (status.isDenied || status.isPermanentlyDenied) {
+          throw Exception('Camera permission denied');
+        }
+      }
+
       final file = await picker.pickImage(
         source: ImageSource.camera,
         imageQuality: 70,
