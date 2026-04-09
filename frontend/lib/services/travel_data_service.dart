@@ -218,8 +218,12 @@ class TravelDataService extends ChangeNotifier {
         final srcResult = await _geocodeCity(sourceName);
         sourceCenter = LatLng(srcResult.latitude, srcResult.longitude);
       } catch (_) {
-      } catch (_) {
-        sourceCenter = null;
+        try {
+          final srcResult = await _safeGeocodeFallback(sourceName);
+          sourceCenter = LatLng(srcResult.latitude, srcResult.longitude);
+        } catch (_) {
+          sourceCenter = null;
+        }
       }
     } else {
       sourceCenter = null;
@@ -1088,6 +1092,18 @@ out center 120;
     if (currentLocation != null) {
       await prefs.setDouble(_currentLocationLatKey, currentLocation!.latitude);
       await prefs.setDouble(_currentLocationLngKey, currentLocation!.longitude);
+    }
+    if (sourceName.isNotEmpty) {
+      await prefs.setString('travel_source_name', sourceName);
+    } else {
+      await prefs.remove('travel_source_name');
+    }
+    if (sourceCenter != null) {
+      await prefs.setDouble('travel_source_lat', sourceCenter!.latitude);
+      await prefs.setDouble('travel_source_lng', sourceCenter!.longitude);
+    } else {
+      await prefs.remove('travel_source_lat');
+      await prefs.remove('travel_source_lng');
     }
     await prefs.setString(
       _placesKey,

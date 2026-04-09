@@ -336,11 +336,27 @@ class _TravelPlannerScreenState extends State<TravelPlannerScreen> {
   Widget _buildTripActions() {
     final active = travelData.tripIsActive;
     final isPlanned = travelData.isPlanned;
+    final completed = travelData.tripIsCompleted;
 
     return Wrap(
       spacing: 12,
       runSpacing: 12,
       children: [
+        if (completed)
+          ElevatedButton.icon(
+            onPressed: null,
+            style: ElevatedButton.styleFrom(
+              disabledBackgroundColor: const Color(0xFFE6EBF1),
+              disabledForegroundColor: const Color(0xFF48626E),
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+              textStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
+            ),
+            icon: const Icon(Icons.check_circle_rounded, size: 18),
+            label: const Text('Trip Completed'),
+          )
+        else ...[
         ElevatedButton(
             onPressed: () async {
               if (!isPlanned) {
@@ -389,6 +405,7 @@ class _TravelPlannerScreenState extends State<TravelPlannerScreen> {
             ),
             child: const Text('End Trip'),
           ),
+        ],
         ElevatedButton.icon(
           onPressed: _inviteFriend,
           style: ElevatedButton.styleFrom(

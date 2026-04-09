@@ -66,7 +66,11 @@ class _MemoryScreenState extends State<MemoryScreen> {
   }
 
   Future<void> pickImage() async {
-    final file = await picker.pickImage(source: ImageSource.gallery);
+    final file = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 70,
+      maxWidth: 1024,
+    );
     if (file == null || !mounted) return;
     setState(() {
       selectedMedia = file;
@@ -77,7 +81,11 @@ class _MemoryScreenState extends State<MemoryScreen> {
 
   Future<void> captureImage() async {
     try {
-      final file = await picker.pickImage(source: ImageSource.camera);
+      final file = await picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 70,
+        maxWidth: 1024,
+      );
       if (file == null || !mounted) return;
       setState(() {
         selectedMedia = file;
@@ -110,7 +118,10 @@ class _MemoryScreenState extends State<MemoryScreen> {
   }
 
   Future<void> pickTripPhotos() async {
-    final files = await picker.pickMultiImage();
+    final files = await picker.pickMultiImage(
+      imageQuality: 70,
+      maxWidth: 1024,
+    );
     if (files.isEmpty || !mounted) return;
 
     try {
