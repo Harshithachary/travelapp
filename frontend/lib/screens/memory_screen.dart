@@ -857,8 +857,8 @@ class _MemoryScreenState extends State<MemoryScreen> {
                           Navigator.of(context).pop();
                           _showUploadSheet(this.context);
                         },
-                        icon: const Icon(Icons.camera_alt_rounded),
-                        label: const Text('Camera'),
+                        icon: const Icon(Icons.camera_alt_rounded, size: 18),
+                        label: const Text('Camera', style: TextStyle(fontSize: 10), textAlign: TextAlign.center),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -869,8 +869,8 @@ class _MemoryScreenState extends State<MemoryScreen> {
                           if (!mounted) return;
                           Navigator.of(context).pop();
                         },
-                        icon: const Icon(Icons.photo),
-                        label: const Text('Pick Trip Photos'),
+                        icon: const Icon(Icons.photo, size: 18),
+                        label: const Text('Trip Photos', style: TextStyle(fontSize: 10), textAlign: TextAlign.center),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -882,8 +882,8 @@ class _MemoryScreenState extends State<MemoryScreen> {
                           Navigator.of(context).pop();
                           _showUploadSheet(this.context);
                         },
-                        icon: const Icon(Icons.videocam),
-                        label: const Text('Pick Video'),
+                        icon: const Icon(Icons.videocam, size: 18),
+                        label: const Text('Video', style: TextStyle(fontSize: 10), textAlign: TextAlign.center),
                       ),
                     ),
                   ],
