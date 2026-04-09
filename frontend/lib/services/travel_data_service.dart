@@ -605,6 +605,24 @@ class TravelDataService extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteTrip(String tripId) async {
+    previousTrips = previousTrips.where((trip) => trip.id != tripId).toList();
+    if (currentTripId == tripId) {
+      currentTripId = '';
+    }
+    await _persistTravelState();
+    notifyListeners();
+  }
+
+  Future<void> updatePastTrip(TravelTrip updatedTrip) async {
+    final index = previousTrips.indexWhere((trip) => trip.id == updatedTrip.id);
+    if (index != -1) {
+      previousTrips[index] = updatedTrip;
+      await _persistTravelState();
+      notifyListeners();
+    }
+  }
+
   Future<void> addEventToItinerary(
     TravelEvent event, {
     int dayIndex = 0,

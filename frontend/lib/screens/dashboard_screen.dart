@@ -1491,6 +1491,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  Future<void> _editPastTrip(TravelTrip trip) async {
+    final controller = TextEditingController(text: trip.destination);
+    
+    final newName = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Edit Trip Name'),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(labelText: 'Destination'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context), 
+              child: const Text('Cancel')
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, controller.text.trim()), 
+              child: const Text('Save')
+            ),
+          ],
+        );
+      },
+    );
+
+    if (newName != null && newName.isNotEmpty && newName != trip.destination) {
+      final updatedTrip = TravelTrip(
+        id: trip.id,
+        destination: newName,
+        cityLabel: newName,
+        startDate: trip.startDate,
+        endDate: trip.endDate,
+        tripDays: trip.tripDays,
+        status: trip.status,
+        shareCode: trip.shareCode,
+        friends: trip.friends,
+      );
+      await travelData.updatePastTrip(updatedTrip);
+    }
+  }
+
   Widget _buildStitchUpcomingTrips() {
     if (travelData.pastTrips.isEmpty) {
       return const Padding(
@@ -1523,13 +1565,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               );
             },
+            onEdit: () {
+              _editPastTrip(trip);
+            },
+            onDelete: () async {
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Delete Trip'),
+                    content: const Text('Are you sure you want to delete this trip? This action cannot be undone.'),
+                    actions: [
+                      TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true), 
+                        child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                      ),
+                    ],
+                  );
+                },
+              );
+              if (confirm == true) {
+                await travelData.deleteTrip(trip.id);
+                if (_selectedPastTrip?.id == trip.id) {
+                  setState(() {
+                    _selectedPastTrip = null;
+                  });
+                }
+              }
+            },
           );
         }).toList(),
       ),
     );
   }
 
-  Widget _tripStitchCard({required String title, required String dates, required Color tagColor, required VoidCallback onTap}) {
+  Widget _tripStitchCard({
+    required String title, 
+    required String dates, 
+    required Color tagColor, 
+    required VoidCallback onTap,
+    VoidCallback? onEdit,
+    VoidCallback? onDelete,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -1545,25 +1623,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
             colorFilter: const ColorFilter.mode(Colors.black26, BlendMode.darken),
           ),
         ),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          alignment: Alignment.bottomLeft,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
-            ),
-          ),
-          child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
-            Text(dates, style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w600, fontSize: 10)),
+            Container(
+              padding: const EdgeInsets.all(16),
+              alignment: Alignment.bottomLeft,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
+                  Text(dates, style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w600, fontSize: 10)),
+                ],
+              ),
+            ),
+            if (onEdit != null || onDelete != null)
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Row(
+                  children: [
+                    if (onEdit != null)
+                      GestureDetector(
+                        onTap: onEdit,
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.85),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.edit_outlined, size: 16, color: Color(0xFF102A43)),
+                        ),
+                      ),
+                    if (onEdit != null && onDelete != null) const SizedBox(width: 8),
+                    if (onDelete != null)
+                      GestureDetector(
+                        onTap: onDelete,
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.85),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.delete_outline, size: 16, color: Color(0xFFE53935)),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
           ],
-        ),
         ),
       ),
     );

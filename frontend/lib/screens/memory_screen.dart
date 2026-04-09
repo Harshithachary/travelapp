@@ -76,13 +76,37 @@ class _MemoryScreenState extends State<MemoryScreen> {
   }
 
   Future<void> captureImage() async {
-    final file = await picker.pickImage(source: ImageSource.camera);
-    if (file == null || !mounted) return;
-    setState(() {
-      selectedMedia = file;
-      selectedMediaType = 'image';
-      draftMemoryId = null;
-    });
+    try {
+      final file = await picker.pickImage(source: ImageSource.camera);
+      if (file == null || !mounted) return;
+      setState(() {
+        selectedMedia = file;
+        selectedMediaType = 'image';
+        draftMemoryId = null;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Camera Unavailable'),
+          content: const Text('Camera access was denied or is blocked by your browser. Ensure you are on a secure (HTTPS) connection, or try picking from your gallery instead.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                pickImage(); // Fallback to gallery
+              },
+              child: const Text('Use Gallery', style: TextStyle(color: Color(0xFF0B5F8E))),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Future<void> pickTripPhotos() async {
