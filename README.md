@@ -12,7 +12,7 @@ The application allows users to:
 
 🧠 Get intelligent suggestions using AI-driven agents
 
-📊 Analyze travel patterns and behavior and location tracking
+📊 Analyze travel patterns and behavior and location tracking                                                                                                                                             
 
 
 
@@ -28,7 +28,7 @@ Database: MongoDB Atlas
 
 AI & Processing: Python APIs (Agentic AI logic)
 
-Deployment: Render (Backend), Netlify (Frontend)
+Deployment: Render (Backend), Netlify (Frontend)                                                                                                                                                          
 
 
 
