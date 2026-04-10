@@ -186,12 +186,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
     final mediaType =
         selectedMedia?.path.endsWith('.mp4') == true ? 'video' : 'image';
 
-    if (description.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Description is required')),
-      );
-      return;
-    }
+    // Removed mandatory description check to allow optional descriptions
 
     try {
       setState(() => uploading = true);
