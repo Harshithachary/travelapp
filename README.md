@@ -14,6 +14,9 @@ The application allows users to:
 
 📊 Analyze travel patterns and behavior and location tracking
 
+
+
+
 ⚙️ Technologies Used
 
 
@@ -27,24 +30,44 @@ AI & Processing: Python APIs (Agentic AI logic)
 
 Deployment: Render (Backend), Netlify (Frontend)
 
+
+
 🚀 Execution Steps
+
 🔹 1. Clone the Repository
+
 git clone https://github.com/your-username/travelapp.git
+
 cd travelapp
+
 🔹 2. Backend Setup
+
 cd backend
+
 npm install
+
 Create .env file:
+
 MONGO_URI=your_mongodb_connection_string
+
 Run backend:node index.js
+
 🔹 3. Frontend Setup
+
 cd frontend
+
 flutter pub get
+
 flutter run
+
 🔹 4. Build for Web
+
 flutter build web
+
 🔹 5. Deployment
+
 Backend → Deploy on Render
+
 Frontend → Upload build/web to Netlify
 
 
