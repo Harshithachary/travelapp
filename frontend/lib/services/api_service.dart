@@ -133,6 +133,24 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> _delete(String endpoint) async {
+    try {
+      final response = await http
+          .delete(Uri.parse('$baseUrl$endpoint'))
+          .timeout(_requestTimeout);
+      final decoded = _decodeResponse(response);
+      if (decoded is Map<String, dynamic>) {
+        return _success(decoded);
+      }
+      return _error('Invalid API response');
+    } catch (e) {
+      if (demoMode && _shouldUseDemoFallback(e)) {
+        return {'status': 'success', 'message': 'Demo delete successful'};
+      }
+      return _error(_friendlyError(e));
+    }
+  }
+
   Future<Map<String, dynamic>> runAllAgents({
     String location = 'Hyderabad',
     String? time,
@@ -208,6 +226,10 @@ class ApiService {
     return _post('/agents/end-trip', {
       'trip_id': tripId,
     });
+  }
+
+  Future<Map<String, dynamic>> deleteTrip({required String tripId}) async {
+    return _delete('/delete-trip/$tripId');
   }
 
   Future<Map<String, dynamic>> getMemories({String? tripId}) async {

@@ -621,6 +621,12 @@ class TravelDataService extends ChangeNotifier {
       currentTripId = '';
     }
     await _persistTravelState();
+    
+    try {
+      await _api.deleteTrip(tripId: tripId);
+    } catch (e) {
+      debugPrint("API deleteTrip error: $e");
+    }
     notifyListeners();
   }
 

@@ -847,9 +847,9 @@ class _MemoryScreenState extends State<MemoryScreen> {
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () async {
-                          await captureImage();
-                          if (!mounted) return;
                           Navigator.of(context).pop();
+                          await captureImage();
+                          if (!mounted || selectedMedia == null) return;
                           _showUploadSheet(this.context);
                         },
                         icon: const Icon(Icons.camera_alt_rounded, size: 18),
@@ -860,9 +860,8 @@ class _MemoryScreenState extends State<MemoryScreen> {
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () async {
-                          await pickTripPhotos();
-                          if (!mounted) return;
                           Navigator.of(context).pop();
+                          await pickTripPhotos();
                         },
                         icon: const Icon(Icons.photo, size: 18),
                         label: const Text('Trip Photos', style: TextStyle(fontSize: 10), textAlign: TextAlign.center),
@@ -872,9 +871,9 @@ class _MemoryScreenState extends State<MemoryScreen> {
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () async {
-                          await pickVideo();
-                          if (!mounted) return;
                           Navigator.of(context).pop();
+                          await pickVideo();
+                          if (!mounted || selectedMedia == null) return;
                           _showUploadSheet(this.context);
                         },
                         icon: const Icon(Icons.videocam, size: 18),
