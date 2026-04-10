@@ -19,15 +19,11 @@ The application allows users to:
 
 Frontend: Flutter, Dart
 
-
 Backend: Node.js, Express.js
-
 
 Database: MongoDB Atlas
 
-
 AI & Processing: Python APIs (Agentic AI logic)
-
 
 Deployment: Render (Backend), Netlify (Frontend)
 
