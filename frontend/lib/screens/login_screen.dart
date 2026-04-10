@@ -82,41 +82,21 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: const Color(0xFF171922),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: CustomPaint(painter: _LoginGridPainter()),
-            ),
-            SafeArea(
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(10),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 340),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(20, 36, 20, 28),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Color(0xFFE8F6FF), Color(0xFFF7FBFF)],
-                        ),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color: const Color(0xFF4DB6AC), // Stitch Secondary
-                          width: 5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
-                            blurRadius: 20,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFFE8F6FF), Color(0xFFF7FBFF)],
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Column(
+                  children: [
                           Container(
                             width: 66,
                             height: 66,
@@ -332,13 +312,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                         ],
-                      ),
-                    ),
-                  ),
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -399,32 +376,3 @@ class _FooterText extends StatelessWidget {
   }
 }
 
-class _LoginGridPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final dotPaint = Paint()..color = const Color(0x1FFFFFFF);
-    final linePaint = Paint()
-      ..color = const Color(0x12FFFFFF)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
-
-    const spacing = 18.0;
-
-    for (double x = 0; x <= size.width; x += spacing) {
-      for (double y = 0; y <= size.height; y += spacing) {
-        canvas.drawCircle(Offset(x, y), 1, dotPaint);
-      }
-    }
-
-    for (double x = 0; x <= size.width; x += spacing * 4) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), linePaint);
-    }
-
-    for (double y = 0; y <= size.height; y += spacing * 4) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), linePaint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}

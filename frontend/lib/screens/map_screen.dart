@@ -92,13 +92,14 @@ class _MapScreenState extends State<MapScreen> {
     final points = <LatLng>[];
 
     if (travelData.cityCenter != null) points.add(travelData.cityCenter!);
-    if (travelData.sourceCenter != null) points.add(travelData.sourceCenter!);
-    if (travelData.tripIsActive && travelData.currentLocation != null) points.add(travelData.currentLocation!);
 
     final startPoint = travelData.sourceCenter ?? travelData.currentLocation;
     final waypoints = <LatLng>[];
     
-    if (startPoint != null) waypoints.add(startPoint);
+    if (startPoint != null) {
+      points.add(startPoint);
+      waypoints.add(startPoint);
+    }
 
     for (final stop in travelData.itineraryStops) {
       final p = LatLng(stop.latitude, stop.longitude);
