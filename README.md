@@ -5,16 +5,30 @@ Smart Travel Tracking using Agentic AI is an intelligent travel system that help
 The application allows users to:
 
 📍 Plan trips efficiently based on preferences
+
 💰 Track expenses during travel
+
 🖼️ Store and manage travel memories (photos & descriptions)
+
 🧠 Get intelligent suggestions using AI-driven agents
+
 📊 Analyze travel patterns and behavior and location tracking
 
 ⚙️ Technologies Used
+
+
 Frontend: Flutter, Dart
+
+
 Backend: Node.js, Express.js
+
+
 Database: MongoDB Atlas
+
+
 AI & Processing: Python APIs (Agentic AI logic)
+
+
 Deployment: Render (Backend), Netlify (Frontend)
 
 🚀 Execution Steps
