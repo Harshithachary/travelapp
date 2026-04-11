@@ -27,7 +27,15 @@ class _MapScreenState extends State<MapScreen> {
   double? _routeDistanceKm;
 
   Future<void> _fetchRoute(List<LatLng> waypoints) async {
-    if (waypoints.length < 2) return;
+    if (waypoints.length < 2) {
+      if (mounted && _routePoints.isNotEmpty) {
+        setState(() {
+          _routePoints = [];
+          _routeDistanceKm = null;
+        });
+      }
+      return;
+    }
     final sig = waypoints.map((w) => '${w.latitude},${w.longitude}').join('|');
     if (_lastRouteSig == sig) return;
     _lastRouteSig = sig;
@@ -93,7 +101,11 @@ class _MapScreenState extends State<MapScreen> {
 
     if (travelData.cityCenter != null) points.add(travelData.cityCenter!);
 
-    final startPoint = travelData.sourceCenter ?? travelData.currentLocation;
+    LatLng? startPoint = travelData.sourceCenter;
+    if (startPoint == null && travelData.tripIsActive) {
+      startPoint = travelData.currentLocation;
+    }
+
     final waypoints = <LatLng>[];
     
     if (startPoint != null) {
@@ -349,7 +361,7 @@ class _MapScreenState extends State<MapScreen> {
                     color: const Color(0xFF008080),
                     strokeWidth: 4.0,
                   )
-                else if ((travelData.sourceCenter != null || travelData.currentLocation != null) && travelData.cityCenter != null)
+                else if ((travelData.sourceCenter != null || (travelData.tripIsActive && travelData.currentLocation != null)) && travelData.cityCenter != null)
                   Polyline(
                     points: [
                       travelData.sourceCenter ?? travelData.currentLocation!,
@@ -368,7 +380,7 @@ class _MapScreenState extends State<MapScreen> {
                     height: 80,
                     point: travelData.cityCenter!,
                     builder: (_) {
-                      final startPoint = travelData.sourceCenter ?? travelData.currentLocation;
+                      final startPoint = travelData.sourceCenter ?? (travelData.tripIsActive ? travelData.currentLocation : null);
                       final fallbackDist = startPoint != null 
                         ? const Distance().as(LengthUnit.Meter, startPoint, travelData.cityCenter!) / 1000.0
                         : 0.0;
