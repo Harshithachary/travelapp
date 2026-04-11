@@ -102,9 +102,6 @@ class _MapScreenState extends State<MapScreen> {
     if (travelData.cityCenter != null) points.add(travelData.cityCenter!);
 
     LatLng? startPoint = travelData.sourceCenter;
-    if (startPoint == null && travelData.tripIsActive) {
-      startPoint = travelData.currentLocation;
-    }
 
     final waypoints = <LatLng>[];
     
@@ -361,10 +358,10 @@ class _MapScreenState extends State<MapScreen> {
                     color: const Color(0xFF008080),
                     strokeWidth: 4.0,
                   )
-                else if ((travelData.sourceCenter != null || (travelData.tripIsActive && travelData.currentLocation != null)) && travelData.cityCenter != null)
+                else if (travelData.sourceCenter != null && travelData.cityCenter != null)
                   Polyline(
                     points: [
-                      travelData.sourceCenter ?? travelData.currentLocation!,
+                      travelData.sourceCenter!,
                       travelData.cityCenter!,
                     ],
                     color: const Color(0xFF008080),
@@ -380,7 +377,7 @@ class _MapScreenState extends State<MapScreen> {
                     height: 80,
                     point: travelData.cityCenter!,
                     builder: (_) {
-                      final startPoint = travelData.sourceCenter ?? (travelData.tripIsActive ? travelData.currentLocation : null);
+                      final startPoint = travelData.sourceCenter;
                       final fallbackDist = startPoint != null 
                         ? const Distance().as(LengthUnit.Meter, startPoint, travelData.cityCenter!) / 1000.0
                         : 0.0;
@@ -410,11 +407,11 @@ class _MapScreenState extends State<MapScreen> {
                       );
                     },
                   ),
-                if (travelData.sourceCenter != null || travelData.currentLocation != null)
+                if (travelData.currentLocation != null)
                   Marker(
                     width: 40,
                     height: 40,
-                    point: travelData.sourceCenter ?? travelData.currentLocation!,
+                    point: travelData.currentLocation!,
                     builder: (_) => Container(
                       decoration: BoxDecoration(
                         color: const Color(0xFF22A7F0),
