@@ -73,3 +73,5 @@ Frontend → Upload build/web to Netlify
 
 
 Frontend → Upload build/web to Netlify
+
+Web App link:https://lucent-bublanina-f1c150.netlify.app/
